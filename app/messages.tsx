@@ -1,32 +1,32 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState } from "react";
 import {
-    FlatList,
-    KeyboardAvoidingView,
-    Platform,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
-} from 'react-native';
+  FlatList,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function ChatScreen() {
   const [messages, setMessages] = useState([
-    { id: '1', text: 'Hi, is this still available?', sent: false },
-    { id: '2', text: 'Yes, it is! 😊', sent: true },
+    { id: "1", text: "Hi, is this still available?", sent: false },
+    { id: "2", text: "Yes, it is! 😊", sent: true },
   ]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const flatListRef = useRef(null);
 
   const sendMessage = () => {
-    if (input.trim() === '') return;
+    if (input.trim() === "") return;
     const newMessage = {
       id: Date.now().toString(),
       text: input,
       sent: true,
     };
     setMessages([...messages, newMessage]);
-    setInput('');
+    setInput("");
 
     // Auto-scroll to the bottom
     setTimeout(() => {
@@ -36,7 +36,7 @@ export default function ChatScreen() {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
       style={styles.wrapper}
       keyboardVerticalOffset={90}
     >
@@ -75,7 +75,7 @@ export default function ChatScreen() {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   chatContainer: {
     paddingHorizontal: 12,
@@ -85,47 +85,45 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 6,
     borderRadius: 16,
-    maxWidth: '80%',
+    maxWidth: "80%",
   },
   sent: {
-    backgroundColor: '#dcf8c6',
-    alignSelf: 'flex-end',
+    backgroundColor: "#dcf8c6",
+    alignSelf: "flex-end",
   },
   received: {
-    backgroundColor: '#f0f0f0',
-    alignSelf: 'flex-start',
+    backgroundColor: "#f0f0f0",
+    alignSelf: "flex-start",
   },
   messageText: {
     fontSize: 16,
-    color: '#333',
+    color: "#333",
   },
   inputRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     padding: 10,
     borderTopWidth: 1,
-    borderColor: '#eee',
+    borderColor: "#eee",
     paddingBottom: 25,
-    
   },
   input: {
     flex: 1,
-    backgroundColor: '#f7f7f7',
+    backgroundColor: "#f7f7f7",
     borderRadius: 20,
     paddingHorizontal: 15,
     paddingVertical: 8,
     fontSize: 16,
-
   },
   sendButton: {
     marginLeft: 10,
-    backgroundColor: '#007f5f',
+    backgroundColor: "#007f5f",
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 20,
   },
   sendButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
   },
 });

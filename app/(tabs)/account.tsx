@@ -1,12 +1,12 @@
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import React from 'react';
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import React from "react";
 import {
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
-} from 'react-native';
+  View,
+} from "react-native";
 
 export default function ProfileScreen() {
   return (
@@ -43,25 +43,34 @@ export default function ProfileScreen() {
 
       {/* Settings List */}
       <View style={styles.settingsCard}>
-        <SettingsItem icon="settings-outline" label="Settings" />
-        <SettingsItem icon="heart-outline" label="Favorites" />
-        <SettingsItem icon="help-circle-outline" label="Help & Support" />
+        <SettingsItem icon="settings-outline" label="Settings" danger={false} />
+        <SettingsItem icon="heart-outline" label="Favorites" danger={false} />
+        <SettingsItem
+          icon="help-circle-outline"
+          label="Help & Support"
+          danger={false}
+        />
         <SettingsItem icon="log-out-outline" label="Sign Out" danger />
       </View>
     </ScrollView>
   );
 }
 
-const SettingsItem = ({ icon, label, danger }) => (
+interface settingsProps {
+  icon: string;
+  label: string;
+  danger?: boolean;
+}
+const SettingsItem: React.FC<settingsProps> = ({ icon, label, danger }) => (
   <TouchableOpacity style={styles.itemRow}>
     <View style={styles.itemLeft}>
       <Ionicons
         name={icon}
         size={20}
-        color={danger ? '#e53935' : '#333'}
+        color={danger ? "#e53935" : "#333"}
         style={{ marginRight: 12 }}
       />
-      <Text style={[styles.itemText, danger && { color: '#e53935' }]}>
+      <Text style={[styles.itemText, danger && { color: "#e53935" }]}>
         {label}
       </Text>
     </View>
@@ -71,26 +80,26 @@ const SettingsItem = ({ icon, label, danger }) => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fafafa',
+    backgroundColor: "#fafafa",
     padding: 16,
   },
   profileCard: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
     elevation: 2,
   },
   profileRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 16,
   },
   avatar: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#ccc', // Placeholder, replace with Image manually
+    backgroundColor: "#ccc", // Placeholder, replace with Image manually
     marginRight: 12,
   },
   profileInfo: {
@@ -98,55 +107,55 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   email: {
-    color: '#555',
+    color: "#555",
     fontSize: 14,
   },
   memberSince: {
     fontSize: 12,
-    color: '#999',
+    color: "#999",
   },
   metricsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     borderTopWidth: 1,
-    borderColor: '#eee',
+    borderColor: "#eee",
     paddingTop: 12,
   },
   metric: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   metricValue: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 16,
   },
   metricLabel: {
     fontSize: 12,
-    color: '#777',
+    color: "#777",
   },
   settingsCard: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 12,
     paddingVertical: 8,
     elevation: 2,
   },
   itemRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingVertical: 14,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderColor: '#f1f1f1',
+    borderColor: "#f1f1f1",
   },
   itemLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   itemText: {
     fontSize: 16,
-    color: '#333',
+    color: "#333",
   },
 });

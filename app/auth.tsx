@@ -1,10 +1,10 @@
-import { Formik } from 'formik';
-import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Button, Text, TextInput, Title } from 'react-native-paper';
-import * as Yup from 'yup';
+import { Formik } from "formik";
+import React, { useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { Button, Text, TextInput, Title } from "react-native-paper";
+import * as Yup from "yup";
 
-type AuthMode = 'login' | 'signup';
+type AuthMode = "login" | "signup";
 
 interface AuthFormValues {
   email: string;
@@ -13,49 +13,58 @@ interface AuthFormValues {
 }
 
 const AuthScreen: React.FC = () => {
-  const [mode, setMode] = useState<AuthMode>('login');
+  const [mode, setMode] = useState<AuthMode>("login");
 
   const toggleMode = () => {
-    setMode(mode === 'login' ? 'signup' : 'login');
+    setMode(mode === "login" ? "signup" : "login");
   };
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email('Invalid email').required('Required'),
-    password: Yup.string().min(6, 'At least 6 characters').required('Required'),
-    confirmPassword: mode === 'signup'
-      ? Yup.string()
-          .oneOf([Yup.ref('password')], 'Passwords must match')
-          .required('Required')
-      : Yup.string().notRequired(),
+    email: Yup.string().email("Invalid email").required("Required"),
+    password: Yup.string().min(6, "At least 6 characters").required("Required"),
+    confirmPassword:
+      mode === "signup"
+        ? Yup.string()
+            .oneOf([Yup.ref("password")], "Passwords must match")
+            .required("Required")
+        : Yup.string().notRequired(),
   });
 
   const initialValues: AuthFormValues = {
-    email: '',
-    password: '',
-    confirmPassword: '',
+    email: "",
+    password: "",
+    confirmPassword: "",
   };
 
   const handleAuth = (values: AuthFormValues) => {
-    if (mode === 'login') {
-      console.log('Logging in with:', values);
+    if (mode === "login") {
+      console.log("Logging in with:", values);
       // Add login logic here
     } else {
-      console.log('Signing up with:', values);
+      console.log("Signing up with:", values);
       // Add sign-up logic here
     }
   };
 
   return (
-    
     <View style={styles.container}>
-      <Title style={styles.title}>{mode === 'login' ? 'Login' : 'Sign Up'}</Title>
+      <Title style={styles.title}>
+        {mode === "login" ? "Login" : "Sign Up"}
+      </Title>
 
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleAuth}
       >
-        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+          errors,
+          touched,
+        }) => (
           <>
             <TextInput
               label="Email"
@@ -63,10 +72,10 @@ const AuthScreen: React.FC = () => {
               autoCapitalize="none"
               keyboardType="email-address"
               value={values.email}
-              onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
-              outlineColor='green'
-              activeOutlineColor='green'
+              onChangeText={handleChange("email")}
+              onBlur={handleBlur("email")}
+              outlineColor="green"
+              activeOutlineColor="green"
               style={styles.input}
             />
             {errors.email && touched.email && (
@@ -78,27 +87,27 @@ const AuthScreen: React.FC = () => {
               mode="outlined"
               secureTextEntry
               value={values.password}
-              onChangeText={handleChange('password')}
-              onBlur={handleBlur('password')}
-              outlineColor='green'
-              activeOutlineColor='green'
+              onChangeText={handleChange("password")}
+              onBlur={handleBlur("password")}
+              outlineColor="green"
+              activeOutlineColor="green"
               style={styles.input}
             />
             {errors.password && touched.password && (
               <Text style={styles.error}>{errors.password}</Text>
             )}
 
-            {mode === 'signup' && (
+            {mode === "signup" && (
               <>
                 <TextInput
                   label="Confirm Password"
                   mode="outlined"
                   secureTextEntry
                   value={values.confirmPassword}
-                  onChangeText={handleChange('confirmPassword')}
-                  onBlur={handleBlur('confirmPassword')}
-                  outlineColor='green'
-                  activeOutlineColor='green'
+                  onChangeText={handleChange("confirmPassword")}
+                  onBlur={handleBlur("confirmPassword")}
+                  outlineColor="green"
+                  activeOutlineColor="green"
                   style={styles.input}
                 />
                 {errors.confirmPassword && touched.confirmPassword && (
@@ -107,14 +116,23 @@ const AuthScreen: React.FC = () => {
               </>
             )}
 
-            <Button mode="contained" onPress={handleSubmit} style={styles.button}>
-              {mode === 'login' ? 'Login' : 'Sign Up'}
+            <Button
+              mode="contained"
+              onPress={handleSubmit}
+              style={styles.button}
+            >
+              {mode === "login" ? "Login" : "Sign Up"}
             </Button>
 
-            <Button onPress={toggleMode} mode="text" textColor='black' style={styles.toggleButton}>
-              {mode === 'login'
+            <Button
+              onPress={toggleMode}
+              mode="text"
+              textColor="black"
+              style={styles.toggleButton}
+            >
+              {mode === "login"
                 ? "Don't have an account? Sign Up"
-                : 'Already have an account? Login'}
+                : "Already have an account? Login"}
             </Button>
           </>
         )}
@@ -126,30 +144,29 @@ const AuthScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: 24,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   title: {
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 30,
     fontSize: 26,
-    color: 'green',
+    color: "green",
   },
   input: {
     marginBottom: 12,
   },
   button: {
     marginTop: 12,
-   // marginHorizontal: 30,
-    backgroundColor: 'green',
+    // marginHorizontal: 30,
+    backgroundColor: "green",
   },
   toggleButton: {
     marginTop: 10,
-
   },
   error: {
-    color: 'red',
+    color: "red",
     fontSize: 12,
     marginLeft: 4,
     marginBottom: 8,
