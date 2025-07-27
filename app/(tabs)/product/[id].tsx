@@ -5,6 +5,7 @@ import LoadingSpinner from "@/app/components/LoadingSpinner";
 import Rating from "@/app/components/rating";
 import { getProduct } from "@/app/lib/api";
 import AppColors from "@/assets/AppColors";
+import { useFavoritesStore } from "@/store/favoriteStore";
 import { Product } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
@@ -21,6 +22,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import Toast from "react-native-toast-message";
 
 type ProductWithImages = Product & { additionalImageUrl?: string[] };
 
@@ -83,9 +85,22 @@ const SingleProductScreen = () => {
   const handleViewProfile = () => {
     router.push("/sellerprofie");
   };
+
+  const { isFavorite, toggleFavorite } = useFavoritesStore();
+  const isFav = isFavorite(Number(id));
+  const handleAddToFav = () => {
+    if (product) {
+      toggleFavorite(product);
+      Toast.show({
+        type: isFav ? "info" : "success",
+        text1: isFav ? "Removed from Favorites" : "Added to Favorites",
+      });
+    }
+  };
+
   return (
     <SafeAreaView style={styles.safeView}>
-      <CommonHeader />
+      <CommonHeader isFav={isFav} handleToggleFavorite={handleAddToFav} />
       {loading ? (
         <LoadingSpinner fullScreen />
       ) : error ? (

@@ -19,7 +19,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({
   onAction,
 }) => {
   const size = 64;
-  const color = AppColors.primary;
+  const color = AppColors.text.placeholder;
   const getIcon = () => {
     switch (type) {
       case "search":

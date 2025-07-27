@@ -11,6 +11,7 @@ interface Props {
 
 const CommonHeader = ({ isFav, handleToggleFavorite }: Props) => {
   const router = useRouter();
+
   const handleGoBack = () => {
     if (router.canGoBack()) {
       router.back();
@@ -26,15 +27,14 @@ const CommonHeader = ({ isFav, handleToggleFavorite }: Props) => {
       <View style={styles.buttonView}>
         <TouchableOpacity
           onPress={handleToggleFavorite}
-          style={[styles.favoriteButton, isFav && styles.activeFavoriteButton]}
+          style={[styles.favoriteButton]}
         >
           <AntDesign
-            name="hearto"
-            size={20}
+            name={isFav ? "heart" : "hearto"}
+            size={24}
             color={
               isFav ? AppColors.background.primary : AppColors.text.primary
             }
-            fill={isFav ? "transparent" : AppColors.background.primary}
           />
         </TouchableOpacity>
       </View>

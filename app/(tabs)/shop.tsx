@@ -46,7 +46,7 @@ const shop = () => {
       },
     });
     const data = await response.json();
-    console.log(data);
+    //console.log(data);
     setCategories(data);
   };
 
@@ -262,6 +262,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingHorizontal: 16,
     fontWeight: "bold",
+    color: AppColors.text.primary,
   },
   searchRow: {
     flexDirection: "row",

@@ -35,7 +35,7 @@ const AppColors = {
   status: {
     success: "#4CAF50",
     warning: "#FFC107",
-    error: "#F44336",
+    error: "#cd6767",
     info: "#2196F3",
   },
 };

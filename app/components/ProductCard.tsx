@@ -1,5 +1,7 @@
 import AppColors from "@/assets/AppColors";
+import { useFavoritesStore } from "@/store/favoriteStore";
 import { Product } from "@/types";
+import { AntDesign } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
 import {
@@ -31,22 +33,18 @@ const ProductCard: React.FC<ProductCardProps> = ({
     router.push(`/product/${id}`);
   };
 
-  /*const handleAddToCart = () => {
+  const { isFavorite, toggleFavorite } = useFavoritesStore();
+  const isFav = isFavorite(id);
+  const handleAddToFav = () => {
+    toggleFavorite(product);
     Toast.show({
-      type: "success",
-      text1: "Message Seller",
-      text2: "Api call",
-      visibilityTime: 2000,
+      type: isFav ? "info" : "success",
+      text1: isFav ? "Removed from Favorites" : "Added to Favorites",
     });
-  };*/
+  };
 
   const handleMessage = () => {
-    Toast.show({
-      type: "success",
-      text1: "Message Seller",
-      text2: "Api call",
-      visibilityTime: 2000,
-    });
+    router.push("/messages");
   };
 
   return (
@@ -61,6 +59,20 @@ const ProductCard: React.FC<ProductCardProps> = ({
           style={styles.image}
           resizeMode="contain"
         />
+        <TouchableOpacity
+          onPress={() => {
+            handleAddToFav();
+          }}
+          style={[styles.favoriteButton]}
+        >
+          <AntDesign
+            name={isFav ? "heart" : "hearto"}
+            size={24}
+            color={
+              isFav ? AppColors.background.primary : AppColors.text.primary
+            }
+          />
+        </TouchableOpacity>
       </View>
       <View style={styles.content}>
         <Text style={styles.category}>{category}</Text>

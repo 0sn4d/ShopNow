@@ -20,7 +20,7 @@ interface ProductsState {
   fetchCategories: () => Promise<void>;
   setCategory: (category: string | null) => Promise<void>;
   searchProducts: (query: string) => void;
-  sortProducts: (sortBy: "price-asc" | "price-desc" | "rating") => void;
+  sortProducts: (sortBy: "price-asc" | "price-desc" | "rating" | "") => void;
   searchProductsRealTime: (query: string) => Promise<void>;
 }
 
@@ -93,7 +93,7 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
 
     set({ filteredProducts: filtered });
   },
-  sortProducts: (sortBy: "price-asc" | "price-desc" | "rating") => {
+  sortProducts: (sortBy: "price-asc" | "price-desc" | "rating" | "") => {
     const { filteredProducts } = get();
     let sorted = [...filteredProducts];
 

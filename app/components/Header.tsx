@@ -1,10 +1,13 @@
 import AppColors from "@/assets/AppColors";
+import { useFavoritesStore } from "@/store/favoriteStore";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const Header = () => {
+  const { favoriteItems } = useFavoritesStore();
+
   return (
     <View style={styles.searchRow}>
       <Ionicons name="search" size={20} color={"#00695c"} />
@@ -27,9 +30,11 @@ const Header = () => {
           size={20}
           color={AppColors.primary}
         />
-        <View style={styles.itemsView}>
-          <Text style={styles.itemsText}>0</Text>
-        </View>
+        {favoriteItems.length > 0 && (
+          <View style={styles.itemsView}>
+            <Text style={styles.itemsText}>{favoriteItems.length}</Text>
+          </View>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -93,12 +98,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
-    borderColor: AppColors.primary[500],
-    backgroundColor: AppColors.background.secondary,
+    borderColor: AppColors.status.error,
+    backgroundColor: AppColors.status.error,
   },
   itemsText: {
     fontSize: 10,
-    color: AppColors.text.primary,
+    color: AppColors.text.secondary,
     fontWeight: 800,
   },
 });

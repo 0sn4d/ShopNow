@@ -105,6 +105,7 @@ export default function RootLayout() {
       <Tabs.Screen
         name="favorites"
         options={{
+          headerShown: false,
           href: null,
         }}
       />
