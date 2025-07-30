@@ -9,14 +9,27 @@ import {
   View,
 } from "react-native";
 
+// Mock data for recent chats
 const recentChats = [
-  { id: "1", name: "Alice", lastMessage: "Yes, it is!" },
-  { id: "2", name: "Bob", lastMessage: "Let’s catch up later." },
-  { id: "3", name: "Charlie", lastMessage: "Meeting at 5pm." },
+  {
+    id: "1",
+    name: "Alice",
+    lastMessage: "That's what's up!",
+  },
+  {
+    id: "2",
+    name: "Bob",
+    lastMessage: "Let’s meet at 5.",
+  },
+  {
+    id: "3",
+    name: "Charlie",
+    lastMessage: "On my way!",
+  },
 ];
 
 export default function HomeScreen() {
-  const renderItem = ({}) => (
+  const renderItem = ({ item }: { item: (typeof recentChats)[0] }) => (
     <TouchableOpacity
       style={styles.chatItem}
       onPress={() => router.push("/messages")}
@@ -32,18 +45,8 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <Text style={styles.header}>Messages</Text>
       <TextInput
-        style={{
-          marginTop: 10,
-          marginBottom: 20,
-          marginLeft: 20,
-          marginRight: 20,
-          backgroundColor: "white",
-          fontWeight: "bold",
-          paddingTop: 10,
-          paddingBottom: 10,
-          borderRadius: 15,
-        }}
-        placeholder="   Search Messages"
+        style={styles.searchInput}
+        placeholder="Search Messages"
         placeholderTextColor="#888"
       />
       <FlatList
@@ -70,16 +73,14 @@ const styles = StyleSheet.create({
   chatInfo: {},
   chatName: { fontSize: 18, fontWeight: "bold" },
   chatMessage: { fontSize: 14, color: "#555", marginTop: 4 },
-  fab: {
-    position: "absolute",
-    right: 20,
-    bottom: 30,
-    backgroundColor: "#007AFF",
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    justifyContent: "center",
-    alignItems: "center",
-    elevation: 5,
+  searchInput: {
+    marginTop: 10,
+    marginBottom: 20,
+    marginHorizontal: 20,
+    backgroundColor: "white",
+    fontWeight: "bold",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 15,
   },
 });

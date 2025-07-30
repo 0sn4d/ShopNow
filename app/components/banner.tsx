@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import LoadingSpinner from "./LoadingSpinner";
+import { BACKEND_URL, fetchCategoriesWithImages } from "../lib/api";
 
 type Category = {
   id: number;
@@ -22,34 +23,34 @@ const Banner = () => {
   const touchEndX = useRef(0);
   const minSwipeDistance = 50;
 
-  const fetchCategoriesWithImages = async () => {
-    try {
-      const res = await fetch("https://fakestoreapi.com/products/categories");
-      const categoryNames: string[] = await res.json();
+  useEffect(() => {
+    const mockCategories = [
+      {
+        id: 1,
+        name: "electronics",
+        image:
+          "https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=1470&auto=format&fit=crop",
+      },
+      {
+        id: 2,
+        name: "jewelery",
+        image: "https://fakestoreapi.com/img/jewelery.jpg",
+      },
+      {
+        id: 3,
+        name: "men's clothing",
+        image: "https://fakestoreapi.com/img/men.jpg",
+      },
+      {
+        id: 4,
+        name: "women's clothing",
+        image: "https://fakestoreapi.com/img/women.jpg",
+      },
+    ];
 
-      const categoryData: Category[] = await Promise.all(
-        categoryNames.map(async (cat, index) => {
-          const productRes = await fetch(
-            `https://fakestoreapi.com/products/category/${encodeURIComponent(
-              cat
-            )}`
-          );
-          const products = await productRes.json();
-          return {
-            id: index + 1,
-            name: cat,
-            image: products[0]?.image || "https://via.placeholder.com/250x150",
-          };
-        })
-      );
-
-      setCategories(categoryData);
-    } catch (err) {
-      console.error("Error fetching categories:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    setCategories(mockCategories);
+    setLoading(false); // <- this is what was missing
+  }, []);
 
   const startAutoAdvance = () => {
     if (intervalRef.current) {
@@ -62,10 +63,6 @@ const Banner = () => {
       }, 5000);
     }
   };
-
-  useEffect(() => {
-    fetchCategoriesWithImages();
-  }, []);
 
   useEffect(() => {
     if (categories.length > 0 && !showProducts) {

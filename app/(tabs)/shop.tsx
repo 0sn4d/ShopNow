@@ -18,7 +18,7 @@ import {
 import EmptyState from "../components/EmptyState";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ProductCard from "../components/ProductCard";
-const API_URL = "https://fakestoreapi.com";
+import { BACKEND_URL } from "../lib/api";
 
 const shop = () => {
   const { q: searchParam, category: categoryParam } = useLocalSearchParams();
@@ -39,7 +39,7 @@ const shop = () => {
   const router = useRouter();
 
   const fetchCategories = async () => {
-    const response = await fetch(`${API_URL}/products/categories`, {
+    const response = await fetch(`${BACKEND_URL}/products/categories`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -53,13 +53,13 @@ const shop = () => {
   useEffect(() => {
     fetchCategories();
     fetchProducts();
-    if (categoryParam) {
+    /*if (categoryParam) {
       if (typeof categoryParam === "string") {
         setCategory(categoryParam);
       } else if (Array.isArray(categoryParam) && categoryParam.length > 0) {
         setCategory(categoryParam[0]);
       }
-    }
+    }*/
   }, []);
 
   const renderHeader = () => {

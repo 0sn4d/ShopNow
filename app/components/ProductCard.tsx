@@ -28,6 +28,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   customStyle,
 }) => {
   const { id, title, price, image, category, rating } = product;
+
   const router = useRouter();
   const handleProductRoute = () => {
     router.push(`/product/${id}`);

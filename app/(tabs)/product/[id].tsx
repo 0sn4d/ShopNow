@@ -35,8 +35,9 @@ const SingleProductScreen = () => {
     undefined
   );
 
+  const uniqueId = Number(id);
   const additionalImage: { [key: number]: string[] } = {
-    1: [
+    1000001: [
       "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=687&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=687&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1622560481979-f5b0174242a0?q=80&w=688&auto=format&fit=crop",
@@ -52,9 +53,7 @@ const SingleProductScreen = () => {
     const fetchProductData = async () => {
       try {
         setLoading(true);
-        const idNum = Number(id);
-        const data = await getProduct(idNum);
-
+        const data = await getProduct(id); // <- now uses full uniqueId like "db-2"
         setProduct({
           ...data,
           additionalImageUrl: additionalImage[data.id] || [],
@@ -68,10 +67,10 @@ const SingleProductScreen = () => {
       }
     };
 
-    if (id) {
+    if (uniqueId) {
       fetchProductData();
     }
-  }, [id]);
+  }, [uniqueId]);
 
   const Images = [product?.image, ...(product?.additionalImageUrl ?? [])];
   const handleThumbnailClick = (Images: string) => {
@@ -87,7 +86,7 @@ const SingleProductScreen = () => {
   };
 
   const { isFavorite, toggleFavorite } = useFavoritesStore();
-  const isFav = isFavorite(Number(id));
+  const isFav = isFavorite(Number(uniqueId));
   const handleAddToFav = () => {
     if (product) {
       toggleFavorite(product);
@@ -159,17 +158,26 @@ const SingleProductScreen = () => {
               <Text style={styles.sectionTitle}>Description</Text>
               <Text style={styles.description}>{product?.description}</Text>
 
-              <Text style={styles.sectionTitle}>Seller</Text>
-              <View style={styles.sellerSection}>
-                <View style={styles.placeholder} />
-                <View style={{ flex: 1 }}>
-                  <Text>Name</Text>
-                  <Rating rating={0} showCount={0} />
+              {product?.seller ? (
+                <View style={styles.sellerSection}>
+                  <View style={styles.placeholder} />
+                  <View style={{ flex: 1 }}>
+                    <Text>{product.seller.name}</Text>
+                    <Rating
+                      rating={product.seller.rating ?? 0}
+                      showCount={product.seller.NoReviews ?? 0}
+                    />
+                  </View>
+                  <TouchableOpacity onPress={handleViewProfile}>
+                    <Text style={styles.profileView}>View Profile</Text>
+                  </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={handleViewProfile}>
-                  <Text style={styles.profileView}>View Profile</Text>
-                </TouchableOpacity>
-              </View>
+              ) : (
+                <Text style={{ marginBottom: 10 }}>
+                  Seller information not available
+                </Text>
+              )}
+
               {/* Safety Tip */}
               <View style={styles.safetySection}>
                 <View style={styles.safetyRow}>

@@ -13,6 +13,7 @@ export default function RootLayout() {
       screenOptions={{
         tabBarActiveTintColor: AppColors.background.primary,
         tabBarLabel: () => null,
+        tabBarHideOnKeyboard: true,
       }}
     >
       <Tabs.Screen
@@ -76,6 +77,7 @@ export default function RootLayout() {
       <Tabs.Screen
         name="account"
         options={{
+          headerShown: false,
           title: "Account",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="account" size={35} color={color} />
@@ -111,6 +113,20 @@ export default function RootLayout() {
       />
       <Tabs.Screen
         name="search"
+        options={{
+          href: null,
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="Signup"
+        options={{
+          href: null,
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="login"
         options={{
           href: null,
           headerShown: false,

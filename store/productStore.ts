@@ -2,9 +2,10 @@ import {
   getCategory,
   getProducts,
   getProductsByCategory,
+  postProduct,
   searchProductsApi,
 } from "@/app/lib/api";
-import { Product } from "@/types";
+import { Product, ProductRequest } from "@/types";
 
 import { create } from "zustand";
 
@@ -22,6 +23,7 @@ interface ProductsState {
   searchProducts: (query: string) => void;
   sortProducts: (sortBy: "price-asc" | "price-desc" | "rating" | "") => void;
   searchProductsRealTime: (query: string) => Promise<void>;
+  postProduct: (productData: ProductRequest) => Promise<void>;
 }
 
 export const useProductsStore = create<ProductsState>((set, get) => ({
@@ -129,6 +131,25 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
       }
     } catch (error: any) {
       set({ error: error.message, loading: false });
+    }
+  },
+
+  postProduct: async (productData: ProductRequest) => {
+    set({ loading: true, error: null });
+    try {
+      const newProduct = await postProduct(productData); // Call the API helper
+      set((state) => ({
+        products: [...state.products, newProduct],
+        filteredProducts: [...state.filteredProducts, newProduct],
+        loading: false,
+      }));
+      // 2. Or, refetch all products to ensure consistency (simpler for now)
+      get().fetchProducts();
+      set({ loading: false });
+    } catch (error: any) {
+      console.error("Failed to post product:", error);
+      set({ loading: false, error: error.message || "Failed to add product" });
+      throw error;
     }
   },
 }));

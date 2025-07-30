@@ -3,6 +3,10 @@ import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Text, TextInput, Title } from "react-native-paper";
 import * as Yup from "yup";
+import axios from "axios";
+import AppColors from "@/assets/AppColors";
+import { router } from "expo-router";
+import Toast from "react-native-toast-message";
 
 type AuthMode = "login" | "signup";
 
@@ -36,13 +40,37 @@ const AuthScreen: React.FC = () => {
     confirmPassword: "",
   };
 
-  const handleAuth = (values: AuthFormValues) => {
-    if (mode === "login") {
-      console.log("Logging in with:", values);
-      // Add login logic here
-    } else {
-      console.log("Signing up with:", values);
-      // Add sign-up logic here
+  const api = axios.create({
+    baseURL: "http://172.20.10.5:8080/api",
+    withCredentials: true,
+  });
+
+  const handleAuth = async (values: AuthFormValues) => {
+    try {
+      if (mode === "login") {
+        const response = await api.post("/auth/login", {
+          email: values.email,
+          password: values.password,
+        });
+
+        router.push("/(tabs)");
+        Toast.show({
+          type: "success",
+          text1: "Login Successful",
+        });
+
+        // You can save user data in context/Zustand here
+      } else {
+        const response = await api.post("/auth/signup", {
+          name: values.email.split("@")[0], // Just a placeholder
+          email: values.email,
+          password: values.password,
+          profileImage: "", // Can add later if needed
+        });
+        console.log("Signup success:", response.data);
+      }
+    } catch (error: any) {
+      console.error("Auth failed:", error?.response?.data || error.message);
     }
   };
 
@@ -74,8 +102,8 @@ const AuthScreen: React.FC = () => {
               value={values.email}
               onChangeText={handleChange("email")}
               onBlur={handleBlur("email")}
-              outlineColor="green"
-              activeOutlineColor="green"
+              outlineColor="#00695c"
+              activeOutlineColor="#00695c"
               style={styles.input}
             />
             {errors.email && touched.email && (
@@ -89,8 +117,8 @@ const AuthScreen: React.FC = () => {
               value={values.password}
               onChangeText={handleChange("password")}
               onBlur={handleBlur("password")}
-              outlineColor="green"
-              activeOutlineColor="green"
+              outlineColor="#00695c"
+              activeOutlineColor="#00695c"
               style={styles.input}
             />
             {errors.password && touched.password && (
@@ -106,8 +134,8 @@ const AuthScreen: React.FC = () => {
                   value={values.confirmPassword}
                   onChangeText={handleChange("confirmPassword")}
                   onBlur={handleBlur("confirmPassword")}
-                  outlineColor="green"
-                  activeOutlineColor="green"
+                  outlineColor="#00695c"
+                  activeOutlineColor="#00695c"
                   style={styles.input}
                 />
                 {errors.confirmPassword && touched.confirmPassword && (
@@ -152,7 +180,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 30,
     fontSize: 26,
-    color: "green",
+    color: "#00695c",
   },
   input: {
     marginBottom: 12,
@@ -160,7 +188,7 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 12,
     // marginHorizontal: 30,
-    backgroundColor: "green",
+    backgroundColor: "#00695c",
   },
   toggleButton: {
     marginTop: 10,
