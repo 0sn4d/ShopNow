@@ -2,7 +2,7 @@ import { CategoryResponseDTO, Product, ProductRequest } from "@/types";
 import uuid from "react-native-uuid";
 
 const API_URL = "https://fakestoreapi.com";
-const BACKEND_URL = "http://100.66.67.155:8080"; ///////////// add the address you use to connect to expo here,
+const BACKEND_URL = "http://172.20.10.2:8080"; ///////////// add the address you use to connect to expo here,
 
 // Get all products
 const getProducts = async (): Promise<Product[]> => {
@@ -64,7 +64,7 @@ export const getProduct = async (idNum: string): Promise<Product> => {
 // Get Category
 const getCategory = async (): Promise<string[]> => {
   try {
-    const response = await fetch(`${BACKEND_URL}/api/products/categories`);
+    const response = await fetch(`${API_URL}/api/categories`);
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
@@ -128,7 +128,7 @@ const postProduct = async (productData: ProductRequest): Promise<Product> => {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
+
         body: JSON.stringify(productData),
       }
     );
@@ -182,4 +182,5 @@ export {
   searchProductsApi,
   postProduct,
   BACKEND_URL,
+  API_URL,
 };

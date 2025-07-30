@@ -17,6 +17,7 @@ import { BACKEND_URL } from "../lib/api";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ProductCard from "../components/ProductCard";
 import { Product } from "@/types";
+import { string } from "yup";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -24,14 +25,82 @@ export default function DashboardScreen({ sellerId }: { sellerId: number }) {
   const [user, setUser] = useState(null);
   const [listings, setListings] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch(`http://${BACKEND_URL}/api/products/seller/${sellerId}/products`)
-      .then((res) => res.json())
-      .then((data) => setListings(data))
-      .catch((err) => console.error("Error fetching seller products", err));
-  }, [sellerId]);
+    const fetchSellerProducts = async (idToFetch: number) => {
+      setLoading(true);
 
+      try {
+        const response = await fetch(
+          `${BACKEND_URL}/api/products/seller/${idToFetch}/products`
+        );
+
+        // Check if the response was successful (status code 2xx)
+        if (!response.ok) {
+          const errorBody = await response.text(); // Get response body, could be JSON or plain text
+          console.error(
+            `HTTP Error: ${response.status} - ${response.statusText}`,
+            errorBody
+          );
+          // Set a more descriptive error message based on the status
+          if (response.status === 404) {
+            console.log("Seller not found or no products for this seller.");
+          } else if (response.status === 401) {
+            console.log("Unauthorized: Please log in.");
+            // Optionally, redirect to login screen
+            // router.replace('/login');
+          } else {
+            console.log(`Failed to fetch products: $z{response.statusText}`);
+          }
+          setListings([]); // Clear listings on error
+          return; // Stop further processing
+        }
+
+        const data = await response.json();
+        setListings(data); // Assuming data is an array of Product
+      } catch (err: any) {
+        // This catches network errors, JSON parsing errors, etc.
+        console.error(
+          "Network or parsing error fetching seller products:",
+          err
+        );
+        setError(err.message || "Failed to connect to server.");
+        setListings([]); // Clear listings on error
+      } finally {
+        setLoading(false); // Always set loading to false when done
+      }
+    };
+
+    // Determine the sellerId to use for fetching
+    const initializeFetch = async () => {
+      let finalSellerId = sellerId;
+
+      if (!finalSellerId) {
+        // If sellerId prop is not provided, try to get it from AsyncStorage
+        const storedUserId = await AsyncStorage.getItem("userId");
+        if (storedUserId) {
+          const parsedUserId = parseInt(storedUserId, 10);
+          if (!isNaN(parsedUserId)) {
+            finalSellerId = parsedUserId;
+          }
+        }
+      }
+
+      if (finalSellerId) {
+        fetchSellerProducts(finalSellerId);
+      } else {
+        // If no sellerId can be determined, consider it a non-seller state or unauthenticated
+        setLoading(false);
+        console.log(
+          "Seller ID not available. Please ensure you are logged in."
+        );
+        setListings([]);
+      }
+    };
+
+    initializeFetch();
+  }, [sellerId, BACKEND_URL]);
   if (loading) {
     return <LoadingSpinner fullScreen />;
   }
